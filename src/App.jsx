@@ -1,33 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import UserFormWrapper from './Components/UserForm/UserFormWrapper';
-import UserList from './Components/UserList/UserList';
+import UserFormWrapper from "./Components/UserForm/UserFormWrapper";
+import UserList from "./Components/UserList/UserList";
 
-function App() {
+const App = () => {
   const [newUser, setNewUser] = useState([]);
 
   const userObjHandler = (userObject) => {
-    setNewUser((prevGoals) => {
-      const updateUser = [...prevGoals];
-      updateUser.unshift({ ...userObject });
-      console.log(updateUser);
-      return updateUser;
+    setNewUser((prevState) => {
+      console.table([userObject, ...prevState]);
+      return [userObject, ...prevState];
     });
   };
 
-  const content =
-    newUser.length > 0 ? (
-      <UserList onUserList={newUser} />
-    ) : (
-      <h3 className="text-center font-bold">No Users found. Maybe add one?</h3>
-    );
+  const emptyList = newUser.length <= 0 && (
+    <h3 className="text-center font-bold text-white">
+      No Users found. Maybe add one?
+    </h3>
+  );
 
   return (
     <section className="App">
       <UserFormWrapper onUserObj={userObjHandler} />
-      {content}
+      {emptyList}
+      <UserList onUserList={newUser} onSetNewUser={setNewUser} />
     </section>
   );
-}
+};
 
 export default App;

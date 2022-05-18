@@ -1,10 +1,11 @@
-import React from 'react';
+import React from "react";
 
-const Button = ({ children, typeButton, onClick }) => {
+const Button = (props) => {
+  const { children, typeButton, onClick, customClass } = props;
   return (
     <button
-      className="bg-violet-700 rounded-md py-1 px-4 shadow-md mx-auto hover:bg-violet-900"
-      type={typeButton || 'button'}
+      className={`rounded-md bg-violet-700 py-1 px-4 shadow-md hover:bg-violet-900 ${customClass}`}
+      type={typeButton || "button"}
       onClick={onClick}
     >
       {children}

@@ -1,19 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, Fragment } from "react";
 
-import Button from '../UI/Button';
-import Modal from '../Modal/Modal';
+import Button from "../UI/Button";
+import Modal from "../Modal/Modal";
 
-const UserForm = ({ onUser }) => {
-  const [username, setUsername] = useState('');
-  const [age, setAge] = useState('');
+const UserForm = (props) => {
+  const { onUser } = props;
+  const usernameRef = useRef();
+  const ageRef = useRef();
+  console.log(usernameRef);
+
   const [error, setError] = useState(null);
+  // const [username, setUsername] = useState('');
+  // const [age, setAge] = useState('');
 
-  const userInputHandler = (e) => {
-    setUsername(e.target.value);
-  };
-  const ageInputHandler = (e) => {
-    setAge(e.target.value);
-  };
+  // const userInputHandler = (e) => {
+  //   setUsername(e.target.value);
+  // };
+  // const ageInputHandler = (e) => {
+  //   setAge(e.target.value);
+  // };
 
   const GenerateID = () => {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
@@ -22,32 +27,42 @@ const UserForm = ({ onUser }) => {
   const submitInputHandler = (e) => {
     e.preventDefault();
 
-    if (username.trim().length === 0 || age.trim().length === 0) {
-      setError({
-        titleError: 'Invalid Input',
-        messageError: 'Please enter a valid name and age (non-empty value).',
+    const usernameInputRef = usernameRef.current.value;
+    const ageInputRef = ageRef.current.value;
+
+    console.log(usernameInputRef);
+    console.log(ageInputRef);
+
+    if (
+      usernameInputRef.trim().length === 0 ||
+      ageInputRef.trim().length === 0
+    ) {
+      return setError({
+        titleError: "Invalid Input",
+        messageError: "Please enter a valid name and age (non-empty value).",
       });
-      return;
     }
 
-    if (age < 1) {
-      setError({
-        titleError: 'invalid Input Age',
-        messageError: 'Please enter a valid Age (> 0)',
+    if (+ageInputRef > 150 || +ageInputRef < 1) {
+      return setError({
+        titleError: "invalid Input Age",
+        messageError: "Please enter a valid Age ( age > 0 & age < 150 )",
       });
-      return;
     }
 
     const userInput = {
-      username,
-      age,
+      usernameInputRef,
+      ageInputRef,
       id: GenerateID(),
     };
 
     onUser(userInput);
 
-    setUsername('');
-    setAge('');
+    // setUsername('');
+    // setAge('');
+
+    usernameRef.current.value = "";
+    ageRef.current.value = "";
   };
 
   const errorHandler = () => {
@@ -55,7 +70,7 @@ const UserForm = ({ onUser }) => {
   };
 
   return (
-    <>
+    <Fragment>
       {error && (
         <Modal
           onErrorTitle={error.titleError}
@@ -69,25 +84,29 @@ const UserForm = ({ onUser }) => {
           <input
             id="username"
             type="text"
-            value={username}
-            onChange={userInputHandler}
-            className="border border-black rounded-md"
+            // value={username}
+            // onChange={userInputHandler}
+            ref={usernameRef}
+            className="rounded-md border border-black p-2"
           />
           <label htmlFor="age">Age(Years)</label>
           <input
             id="age"
             type="number"
-            value={age}
-            onChange={ageInputHandler}
-            className="border border-black rounded-md"
+            // value={age}
+            // onChange={ageInputHandler}
+            ref={ageRef}
+            className="rounded-md border border-black p-2"
           />
 
           <div className="flex flex-row justify-start">
-            <Button typeButton={'submit'}>Add User</Button>
+            <Button typeButton={"submit"} customClass={"mx-auto"}>
+              Add User
+            </Button>
           </div>
         </div>
       </form>
-    </>
+    </Fragment>
   );
 };
 

@@ -1,9 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import Card from '../UI/Card';
-import UserForm from './UserForm';
+import Card from "../UI/Card";
+import UserForm from "./UserForm";
 
-const UserFormWrapper = ({ onUserObj }) => {
+const UserFormWrapper = (props) => {
+  const { onUserObj } = props;
   const userFormhandler = (enteredUser) => {
     onUserObj(enteredUser);
   };
